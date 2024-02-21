@@ -8,6 +8,6 @@ services:
     ports:
       - '5431:5432'
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: drizzle
+      POSTGRES_PASSWORD: drizzle
       POSTGRES_DB: db
