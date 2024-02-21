@@ -4,7 +4,11 @@
 
 - [Next.js](https://nextjs.org)
 - [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
+- [Drizzle ORM](https://orm.drizzle.team/)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 - [shadcn/ui](https://ui.shadcn.com/)
+
+## Get Started
+
+replace `web-application-2` with your project name
