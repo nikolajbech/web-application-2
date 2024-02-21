@@ -11,4 +11,4 @@
 
 ## Get Started
 
-replace `web-application-2` with your project name
+Replace `web-application-2` with your project name
