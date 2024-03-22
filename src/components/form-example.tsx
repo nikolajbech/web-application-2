@@ -10,15 +10,28 @@ export const FormExample = () => {
         name: string
         age: number
         email: string
+        selectOption: string
       }>
         formFields={{
-          name: { label: 'Name', type: 'input' },
-          age: { label: 'Age', type: 'input' },
-          email: { label: 'Email', type: 'input' },
+          name: { type: 'input' },
+          age: { type: 'input' },
+          email: { type: 'input' },
+          selectOption: {
+            type: 'radio-buttons',
+            options: [
+              { label: 'Option 1', value: '1' },
+              { label: 'Option 2', value: '2' },
+            ],
+          },
         }}
-        onSubmit={(validated) => console.log(validated)}
+        initialValues={{
+          name: 'Lars',
+        }}
+        onSubmit={(validated) => alert(validated)}
         loading={false}
-        validationSchema={z.object({})}
+        validationSchema={z.object({
+          email: z.string().email(),
+        })}
       />
     </div>
   )

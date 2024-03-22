@@ -1,8 +1,13 @@
 'use client'
 
 import { type FormikProps } from 'formik'
-import { type FormField } from './index'
+import { omit } from 'lodash'
+import { useCallback } from 'react'
 import { Input } from '../ui/input'
+import { Textarea } from '../ui/textarea'
+import { type FormField } from './index'
+import { RadioButtons } from './radio-buttons'
+import { Label } from '../ui/label'
 
 export const Field = <T,>({
   field,
@@ -11,7 +16,6 @@ export const Field = <T,>({
   field: FormField
   formik: FormikProps<Partial<T>>
 }) => {
-  if (!field.key) return null
   const key = field.key as keyof T
 
   const errors = formik.errors[key]
@@ -29,10 +33,40 @@ export const Field = <T,>({
     onBlur: handleBlur,
   }
 
+  const fieldSpecificAttributes = useCallback((field: FormField) => {
+    return omit(field, [
+      'key',
+      'label',
+      'optional',
+      'hidden',
+      'description',
+      'type',
+    ])
+  }, [])
+
   return (
     <div>
-      <b>{field.label}</b>
-      {field.type === 'input' ? <Input type='text' {...attributes} /> : null}
+      <Label>{field.label}</Label>
+      {field.type === 'input' ? (
+        <Input {...attributes} {...fieldSpecificAttributes(field)} />
+      ) : field.type === 'textarea' ? (
+        <Textarea {...attributes} {...fieldSpecificAttributes(field)} />
+      ) : field.type === 'radio-buttons' ? (
+        <RadioButtons
+          options={field.options}
+          defaultValue={value as string}
+          onChange={(value) => {
+            handleChange({
+              target: {
+                name: key,
+                value,
+              },
+            })
+          }}
+        />
+      ) : field.type === 'checkboxes' ? (
+        <Textarea {...attributes} {...fieldSpecificAttributes(field)} />
+      ) : null}
       <div className='text-sm text-red-500'>{errorMessage}</div>
     </div>
   )

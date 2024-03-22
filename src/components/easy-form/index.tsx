@@ -4,6 +4,7 @@ import { Formik } from 'formik'
 import { useCallback, useMemo } from 'react'
 import { type z } from 'zod'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
+import { Button } from '../ui/button'
 import { type InputProps } from '../ui/input'
 import { type TextareaProps } from '../ui/textarea'
 import { Field } from './field'
@@ -15,6 +16,11 @@ export type FormField = {
   hidden?: boolean
   description?: string
 } & (InputField | TextAreaField | RadioButtonsField | CheckBoxesField)
+
+export type Options = {
+  label: string
+  value: string
+}
 
 type InputField = {
   type: 'input'
@@ -34,11 +40,6 @@ type CheckBoxesField = {
   options: Options[]
 }
 
-type Options = {
-  label: string
-  value: string
-}
-
 type Props<T> = {
   formFields: Record<keyof T, FormField>
   initialValues?: Partial<T>
@@ -50,7 +51,8 @@ type Props<T> = {
 
 export const EasyForm = <T,>(p: Props<T>) => {
   const keyToLabel = (key: string) => {
-    return key // Todo
+    const withSpaces = key.replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    return withSpaces[0]?.toLocaleUpperCase() + withSpaces.slice(1)
   }
 
   const initialValues = useMemo(
@@ -58,20 +60,21 @@ export const EasyForm = <T,>(p: Props<T>) => {
     () =>
       Object.keys(p.formFields).reduce((acc, key) => {
         const field = p.formFields[key as keyof T]
+        const initialValue = p.initialValues?.[key as keyof T]
 
         if (field.type === 'checkboxes') {
           return {
             ...acc,
-            [key]: [],
+            [key]: initialValue ?? [],
           }
         }
 
         return {
           ...acc,
-          [key]: '',
+          [key]: initialValue ?? '',
         }
       }, {} as Partial<T>),
-    [p.formFields],
+    [p.formFields, p.initialValues],
   )
 
   const fields = useMemo(
@@ -101,42 +104,20 @@ export const EasyForm = <T,>(p: Props<T>) => {
         validate={validate}
         onSubmit={p.onSubmit}
       >
-        {/* {
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-        } */}
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
-            {fields.map((field, i) => (
-              <Field key={i} formik={formik} field={field} />
-            ))}
-            {/* 
-            <input
-              type='email'
-              name='email'
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.email}
-            />
-            {errors.email && touched.email && errors.email}
-
-            <input
-              type='password'
-              name='password'
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.password}
-            />
-            {errors.password && touched.password && errors.password}
-
-            <button type='submit' disabled={isSubmitting}>
+            <div className='flex flex-col gap-3'>
+              {fields.map((field, i) => (
+                <Field<T> key={i} field={field} formik={formik} />
+              ))}
+            </div>
+            <Button
+              type='submit'
+              className='mt-8'
+              disabled={formik.isSubmitting}
+            >
               Submit
-            </button> */}
+            </Button>
           </form>
         )}
       </Formik>
