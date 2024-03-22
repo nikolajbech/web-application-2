@@ -66,29 +66,39 @@ export const Field = <T,>({
   return (
     <div>
       <Label>{field.label}</Label>
+
       {field.description && (
         <div className='mb-3 text-sm opacity-70'>{field.description}</div>
       )}
-      {field.type === 'input' ? (
+
+      {field.type === 'input' && (
         <Input {...attributes} {...fieldSpecificAttributes(field)} />
-      ) : field.type === 'textarea' ? (
+      )}
+
+      {field.type === 'textarea' && (
         <Textarea {...attributes} {...fieldSpecificAttributes(field)} />
-      ) : field.type === 'radio-buttons' ? (
+      )}
+
+      {field.type === 'radio-buttons' && (
         <RadioButtons
           options={field.options}
           value={value as string}
           onChange={handleValueChange}
         />
-      ) : field.type === 'checkboxes' ? (
+      )}
+
+      {field.type === 'checkboxes' && (
         <Checkboxes
           options={field.options}
           onChange={handleValueChange}
           values={value as string[]}
         />
-      ) : null}
+      )}
+
       {field.helpText && (
         <div className='mt-1 text-sm opacity-60'>{field.helpText}</div>
       )}
+
       <div className='overflow-hidden text-sm text-red-500' ref={parent}>
         {errorMessage && <div className='mt-1'>{errorMessage}</div>}
       </div>
