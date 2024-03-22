@@ -2,12 +2,33 @@
 'use client'
 import { Formik } from 'formik'
 import { useCallback, useMemo } from 'react'
-import { type z } from 'zod'
-import { toFormikValidationSchema } from 'zod-formik-adapter'
+import * as Yup from 'yup'
+import {
+  type ArraySchema,
+  type BooleanSchema,
+  type DateSchema,
+  type NumberSchema,
+  type ObjectSchema,
+  type StringSchema,
+} from 'yup'
 import { Button } from '../ui/button'
 import { type FieldProps } from './FieldProps'
 import { Field } from './field'
 import { getFields, getInitialValues } from './utils'
+
+type KeyOf<T> = Extract<keyof T, string>
+
+export type EasyFormYup<T> = Partial<
+  Record<
+    KeyOf<T>,
+    | BooleanSchema
+    | StringSchema
+    | NumberSchema
+    | DateSchema
+    | ArraySchema<any, any>
+    | ObjectSchema<any>
+  >
+>
 
 export type FormField = {
   key?: string
@@ -21,7 +42,7 @@ type Props<T> = {
   formFields: Record<keyof T, FormField>
   initialValues?: Partial<T>
   /** Zod schema for validation */
-  validationSchema?: z.ZodObject<any>
+  yupSchema?: (yup: typeof Yup) => EasyFormYup<T>
   onSubmit: (validatedValues: Partial<T>) => void
   loading: boolean
 }
@@ -34,17 +55,13 @@ export const EasyForm = <T,>(p: Props<T>) => {
 
   const fields = useMemo(() => getFields(p.formFields), [p.formFields])
 
-  const validate = useCallback(
-    () =>
-      p.validationSchema ? toFormikValidationSchema(p.validationSchema) : {},
-    [p.validationSchema],
-  )
+  const yupSchema = useCallback(() => p.yupSchema?.(Yup), [p.yupSchema])
 
   return (
     <div className=''>
       <Formik
         initialValues={initialValues}
-        validate={validate}
+        validationSchema={Yup.object().shape(yupSchema as any)}
         onSubmit={p.onSubmit}
       >
         {(formik) => (

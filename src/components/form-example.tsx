@@ -1,6 +1,5 @@
 'use client'
 
-import { z } from 'zod'
 import { EasyForm } from './easy-form'
 
 export const FormExample = () => {
@@ -29,8 +28,8 @@ export const FormExample = () => {
         }}
         onSubmit={(validated) => alert(validated)}
         loading={false}
-        validationSchema={z.object({
-          email: z.string().email(),
+        yupSchema={(yup) => ({
+          email: yup.string().email(),
         })}
       />
     </div>
