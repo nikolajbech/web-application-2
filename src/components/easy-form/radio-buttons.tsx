@@ -1,8 +1,8 @@
 'use client'
 
-import { type Options } from '.'
 import { Label } from '../ui/label'
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
+import { type Options } from './FieldProps'
 
 export const RadioButtons = (p: {
   options: Options[]

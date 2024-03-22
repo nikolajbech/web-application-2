@@ -5,9 +5,9 @@ import { useCallback, useMemo } from 'react'
 import { type z } from 'zod'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
 import { Button } from '../ui/button'
-import { type InputProps } from '../ui/input'
-import { type TextareaProps } from '../ui/textarea'
+import { type FieldProps } from './FieldProps'
 import { Field } from './field'
+import { getFields, getInitialValues } from './utils'
 
 export type FormField = {
   key?: string
@@ -15,30 +15,7 @@ export type FormField = {
   optional?: boolean
   hidden?: boolean
   description?: string
-} & (InputField | TextAreaField | RadioButtonsField | CheckBoxesField)
-
-export type Options = {
-  label: string
-  value: string
-}
-
-type InputField = {
-  type: 'input'
-} & InputProps
-
-type TextAreaField = {
-  type: 'textarea'
-} & TextareaProps
-
-type RadioButtonsField = {
-  type: 'radio-buttons'
-  options: Options[]
-}
-
-type CheckBoxesField = {
-  type: 'checkboxes'
-  options: Options[]
-}
+} & FieldProps
 
 type Props<T> = {
   formFields: Record<keyof T, FormField>
@@ -50,46 +27,12 @@ type Props<T> = {
 }
 
 export const EasyForm = <T,>(p: Props<T>) => {
-  const keyToLabel = (key: string) => {
-    const withSpaces = key.replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-    return withSpaces[0]?.toLocaleUpperCase() + withSpaces.slice(1)
-  }
-
   const initialValues = useMemo(
-    // Initialize with empty values
-    () =>
-      Object.keys(p.formFields).reduce((acc, key) => {
-        const field = p.formFields[key as keyof T]
-        const initialValue = p.initialValues?.[key as keyof T]
-
-        if (field.type === 'checkboxes') {
-          return {
-            ...acc,
-            [key]: initialValue ?? [],
-          }
-        }
-
-        return {
-          ...acc,
-          [key]: initialValue ?? '',
-        }
-      }, {} as Partial<T>),
+    () => getInitialValues(p.formFields, p.initialValues ?? {}),
     [p.formFields, p.initialValues],
   )
 
-  const fields = useMemo(
-    () =>
-      Object.keys(p.formFields).map((key) => {
-        const field = p.formFields[key as keyof T]
-
-        return {
-          key,
-          label: field.label ?? keyToLabel(key),
-          ...field,
-        }
-      }),
-    [p.formFields],
-  ).filter((field) => !field.hidden)
+  const fields = useMemo(() => getFields(p.formFields), [p.formFields])
 
   const validate = useCallback(
     () =>
