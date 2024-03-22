@@ -7,12 +7,12 @@ import { type Options } from './FieldProps'
 export const RadioButtons = (p: {
   options: Options[]
   onChange: ((value: string) => void) | undefined
-  defaultValue: string
+  value: string
 }) => {
   return (
     <RadioGroup
       onValueChange={p.onChange}
-      defaultValue={p.defaultValue}
+      defaultValue={p.value}
       className='mt-2'
     >
       {p.options.map(({ value, label }, i) => (

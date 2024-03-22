@@ -1,13 +1,15 @@
 'use client'
 
+import autoAnimate from '@formkit/auto-animate'
 import { type FormikProps } from 'formik'
 import { omit } from 'lodash'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
 import { type FormField } from './index'
 import { RadioButtons } from './radio-buttons'
 import { Label } from '../ui/label'
+import { Checkboxes } from './checkboxes'
 
 export const Field = <T,>({
   field,
@@ -16,6 +18,12 @@ export const Field = <T,>({
   field: FormField
   formik: FormikProps<Partial<T>>
 }) => {
+  const parent = useRef(null)
+
+  useEffect(() => {
+    parent.current && autoAnimate(parent.current)
+  }, [parent])
+
   const key = field.key as keyof T
 
   const errors = formik.errors[key]
@@ -42,7 +50,7 @@ export const Field = <T,>({
       'description',
       'type',
       'validate',
-    ])
+    ]) as Record<string, unknown>
   }, [])
 
   return (
@@ -55,7 +63,7 @@ export const Field = <T,>({
       ) : field.type === 'radio-buttons' ? (
         <RadioButtons
           options={field.options}
-          defaultValue={value as string}
+          value={value as string}
           onChange={(value) => {
             handleChange({
               target: {
@@ -65,8 +73,23 @@ export const Field = <T,>({
             })
           }}
         />
-      ) : field.type === 'checkboxes' ? null : null}
-      <div className='text-sm text-red-500'>{errorMessage}</div>
+      ) : field.type === 'checkboxes' ? (
+        <Checkboxes
+          options={field.options}
+          onChange={(values) => {
+            handleChange({
+              target: {
+                name: key,
+                value: values,
+              },
+            })
+          }}
+          values={value as string[]}
+        />
+      ) : null}
+      <div className='overflow-hidden text-sm text-red-500' ref={parent}>
+        {errorMessage && <div className='mt-1'>{errorMessage}</div>}
+      </div>
     </div>
   )
 }
