@@ -41,6 +41,7 @@ export const Field = <T,>({
       'hidden',
       'description',
       'type',
+      'validate',
     ])
   }, [])
 
@@ -64,9 +65,7 @@ export const Field = <T,>({
             })
           }}
         />
-      ) : field.type === 'checkboxes' ? (
-        <Textarea {...attributes} {...fieldSpecificAttributes(field)} />
-      ) : null}
+      ) : field.type === 'checkboxes' ? null : null}
       <div className='text-sm text-red-500'>{errorMessage}</div>
     </div>
   )

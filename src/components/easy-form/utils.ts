@@ -1,4 +1,5 @@
 import { type FormField } from '.'
+import * as Yup from 'yup'
 
 export const getInitialValues = <T>(
   formFields: Record<keyof T, FormField>,
@@ -38,3 +39,14 @@ export const getFields = <T>(formFields: Record<keyof T, FormField>) =>
       }
     })
     .filter((field) => !field.hidden)
+
+export const getValidationSchemaFromFields = (formFields: FormField[]) =>
+  formFields.reduce((acc, field) => {
+    if (!field.key) return acc
+
+    const validate = (field as { validate: (yup: typeof Yup) => Yup.AnySchema })
+      .validate
+    if (!validate) return acc
+
+    return { ...acc, [field.key]: validate(Yup) }
+  }, {})

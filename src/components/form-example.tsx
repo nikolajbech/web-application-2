@@ -14,7 +14,7 @@ export const FormExample = () => {
         formFields={{
           name: { type: 'input' },
           age: { type: 'input' },
-          email: { type: 'input' },
+          email: { type: 'input', validate: (yup) => yup.string().email() },
           selectOption: {
             type: 'radio-buttons',
             options: [
@@ -28,9 +28,6 @@ export const FormExample = () => {
         }}
         onSubmit={(validated) => alert(validated)}
         loading={false}
-        yupSchema={(yup) => ({
-          email: yup.string().email(),
-        })}
       />
     </div>
   )

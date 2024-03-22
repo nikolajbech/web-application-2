@@ -1,5 +1,6 @@
 import { type InputProps } from '../ui/input'
 import { type TextareaProps } from '../ui/textarea'
+import type * as Yup from 'yup'
 
 export type FieldProps =
   | InputField
@@ -14,10 +15,12 @@ export type Options = {
 
 type InputField = {
   type: 'input'
+  validate?: (yup: typeof Yup) => Yup.StringSchema
 } & InputProps
 
 type TextAreaField = {
   type: 'textarea'
+  validate?: (yup: typeof Yup) => Yup.StringSchema
 } & TextareaProps
 
 type RadioButtonsField = {

@@ -1,34 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { Formik } from 'formik'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import * as Yup from 'yup'
-import {
-  type ArraySchema,
-  type BooleanSchema,
-  type DateSchema,
-  type NumberSchema,
-  type ObjectSchema,
-  type StringSchema,
-} from 'yup'
 import { Button } from '../ui/button'
 import { type FieldProps } from './FieldProps'
 import { Field } from './field'
-import { getFields, getInitialValues } from './utils'
-
-type KeyOf<T> = Extract<keyof T, string>
-
-export type EasyFormYup<T> = Partial<
-  Record<
-    KeyOf<T>,
-    | BooleanSchema
-    | StringSchema
-    | NumberSchema
-    | DateSchema
-    | ArraySchema<any, any>
-    | ObjectSchema<any>
-  >
->
+import {
+  getFields,
+  getInitialValues,
+  getValidationSchemaFromFields,
+} from './utils'
 
 export type FormField = {
   key?: string
@@ -41,8 +23,6 @@ export type FormField = {
 type Props<T> = {
   formFields: Record<keyof T, FormField>
   initialValues?: Partial<T>
-  /** Zod schema for validation */
-  yupSchema?: (yup: typeof Yup) => EasyFormYup<T>
   onSubmit: (validatedValues: Partial<T>) => void
   loading: boolean
 }
@@ -55,13 +35,16 @@ export const EasyForm = <T,>(p: Props<T>) => {
 
   const fields = useMemo(() => getFields(p.formFields), [p.formFields])
 
-  const yupSchema = useCallback(() => p.yupSchema?.(Yup), [p.yupSchema])
+  const yupSchema = useMemo(
+    () => getValidationSchemaFromFields(fields),
+    [fields],
+  )
 
   return (
     <div className=''>
       <Formik
         initialValues={initialValues}
-        validationSchema={Yup.object().shape(yupSchema as any)}
+        validationSchema={Yup.object().shape(yupSchema)}
         onSubmit={p.onSubmit}
       >
         {(formik) => (
