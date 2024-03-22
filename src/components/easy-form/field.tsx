@@ -54,6 +54,15 @@ export const Field = <T,>({
     ]) as Record<string, unknown>
   }, [])
 
+  const handleValueChange = (value: string | string[]) => {
+    handleChange({
+      target: {
+        name: key,
+        value,
+      },
+    })
+  }
+
   return (
     <div>
       <Label>{field.label}</Label>
@@ -68,26 +77,12 @@ export const Field = <T,>({
         <RadioButtons
           options={field.options}
           value={value as string}
-          onChange={(value) => {
-            handleChange({
-              target: {
-                name: key,
-                value,
-              },
-            })
-          }}
+          onChange={handleValueChange}
         />
       ) : field.type === 'checkboxes' ? (
         <Checkboxes
           options={field.options}
-          onChange={(values) => {
-            handleChange({
-              target: {
-                name: key,
-                value: values,
-              },
-            })
-          }}
+          onChange={handleValueChange}
           values={value as string[]}
         />
       ) : null}

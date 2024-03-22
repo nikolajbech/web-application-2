@@ -8,6 +8,7 @@ import { type FieldProps } from './FieldProps'
 import { Field } from './field'
 import {
   getFields,
+  getFormValues,
   getInitialValues,
   getValidationSchemaFromFields,
 } from './utils'
@@ -33,16 +34,9 @@ type Props<T> = {
 }
 
 export const EasyForm = <T,>(p: Props<T>) => {
-  const initialValues = useMemo(
-    () => getInitialValues(p.formFields, p.initialValues ?? {}),
+  const { initialValues, fields, yupSchema } = useMemo(
+    () => getFormValues(p.formFields, p.initialValues ?? {}),
     [p.formFields, p.initialValues],
-  )
-
-  const fields = useMemo(() => getFields(p.formFields), [p.formFields])
-
-  const yupSchema = useMemo(
-    () => getValidationSchemaFromFields(fields),
-    [fields],
   )
 
   return (

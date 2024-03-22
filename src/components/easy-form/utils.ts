@@ -52,3 +52,18 @@ export const getValidationSchemaFromFields = <T>(
 
     return { ...acc, [field.key]: validate(Yup) }
   }, {})
+
+export const getFormValues = <T>(
+  formFields: Record<keyof T, FormField>,
+  initialValues: Partial<T>,
+) => {
+  const _initialValues = getInitialValues(formFields, initialValues ?? {})
+  const fields = getFields(formFields)
+  const yupSchema = getValidationSchemaFromFields(fields)
+
+  return {
+    initialValues: _initialValues,
+    fields,
+    yupSchema,
+  }
+}
