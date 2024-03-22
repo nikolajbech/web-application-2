@@ -6,7 +6,7 @@ import { omit } from 'lodash'
 import { useCallback, useEffect, useRef } from 'react'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
-import { type FormField } from './index'
+import { type ComputedFormField, type FormField } from './index'
 import { RadioButtons } from './radio-buttons'
 import { Label } from '../ui/label'
 import { Checkboxes } from './checkboxes'
@@ -15,7 +15,7 @@ export const Field = <T,>({
   field,
   formik,
 }: {
-  field: FormField
+  field: ComputedFormField<T>
   formik: FormikProps<Partial<T>>
 }) => {
   const parent = useRef(null)
@@ -24,7 +24,7 @@ export const Field = <T,>({
     parent.current && autoAnimate(parent.current)
   }, [parent])
 
-  const key = field.key as keyof T
+  const { key } = field
 
   const errors = formik.errors[key]
   const touched = formik.touched[key]
@@ -48,6 +48,7 @@ export const Field = <T,>({
       'optional',
       'hidden',
       'description',
+      'helpText',
       'type',
       'validate',
     ]) as Record<string, unknown>
@@ -56,6 +57,9 @@ export const Field = <T,>({
   return (
     <div>
       <Label>{field.label}</Label>
+      {field.description && (
+        <div className='mb-3 text-sm opacity-70'>{field.description}</div>
+      )}
       {field.type === 'input' ? (
         <Input {...attributes} {...fieldSpecificAttributes(field)} />
       ) : field.type === 'textarea' ? (
@@ -87,6 +91,9 @@ export const Field = <T,>({
           values={value as string[]}
         />
       ) : null}
+      {field.helpText && (
+        <div className='mt-1 text-sm opacity-60'>{field.helpText}</div>
+      )}
       <div className='overflow-hidden text-sm text-red-500' ref={parent}>
         {errorMessage && <div className='mt-1'>{errorMessage}</div>}
       </div>

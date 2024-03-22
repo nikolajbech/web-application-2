@@ -1,6 +1,7 @@
 'use client'
 
 import { Checkbox } from '../ui/checkbox'
+import { Label } from '../ui/label'
 import { type Options } from './FieldProps'
 
 export const Checkboxes = (p: {
@@ -8,6 +9,16 @@ export const Checkboxes = (p: {
   onChange: ((values: string[]) => void) | undefined
   values: string[]
 }) => {
+  const onClick = (value: string) => {
+    if (p.onChange) {
+      p.onChange(
+        p.values.includes(value)
+          ? p.values.filter((v) => v !== value)
+          : [...p.values, value],
+      )
+    }
+  }
+
   return (
     <div className='mt-2 flex flex-col gap-2'>
       {p.options.map(({ value, label }, i) => (
@@ -15,22 +26,14 @@ export const Checkboxes = (p: {
           <Checkbox
             id={value}
             checked={p.values.includes(value)}
-            onClick={() => {
-              if (p.onChange) {
-                p.onChange(
-                  p.values.includes(value)
-                    ? p.values.filter((v) => v !== value)
-                    : [...p.values, value],
-                )
-              }
-            }}
+            onClick={() => onClick(value)}
           />
-          <label
+          <Label
             htmlFor={value}
             className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
           >
             {label}
-          </label>
+          </Label>
         </div>
       ))}
     </div>

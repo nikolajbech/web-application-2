@@ -13,12 +13,17 @@ import {
 } from './utils'
 
 export type FormField = {
-  key?: string
   label?: string // Will default to the key
   optional?: boolean
   hidden?: boolean
   description?: string
+  helpText?: string
 } & FieldProps
+
+export type ComputedFormField<T> = FormField & {
+  key: keyof T
+  label: string
+}
 
 type Props<T> = {
   formFields: Record<keyof T, FormField>
@@ -49,7 +54,7 @@ export const EasyForm = <T,>(p: Props<T>) => {
       >
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
-            <div className='flex flex-col gap-3'>
+            <div className='flex flex-col gap-5'>
               {fields.map((field, i) => (
                 <Field<T> key={i} field={field} formik={formik} />
               ))}
