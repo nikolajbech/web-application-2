@@ -4,9 +4,9 @@ services:
   db:
     image: postgres:16
     restart: always
-    container_name: db-container
+    container_name: web-application-2-container
     ports:
-      - '5431:5432'
+      - '5683:5432'
     environment:
       POSTGRES_USER: drizzle
       POSTGRES_PASSWORD: drizzle
