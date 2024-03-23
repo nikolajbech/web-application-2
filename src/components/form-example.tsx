@@ -19,6 +19,7 @@ export const FormExample = () => {
           email: {
             helpText: 'Write you email with an @',
             type: 'input',
+            label: 'Email address',
             validate: (yup) => yup.string().email(),
           },
           selectOption: {

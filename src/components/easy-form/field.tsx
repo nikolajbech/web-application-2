@@ -1,15 +1,15 @@
 'use client'
 
-import autoAnimate from '@formkit/auto-animate'
+import { animated, useTransition } from '@react-spring/web'
 import { type FormikProps } from 'formik'
 import { omit } from 'lodash'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback } from 'react'
 import { Input } from '../ui/input'
+import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
+import { Checkboxes } from './checkboxes'
 import { type ComputedFormField, type FormField } from './index'
 import { RadioButtons } from './radio-buttons'
-import { Label } from '../ui/label'
-import { Checkboxes } from './checkboxes'
 import { SimpleSelect } from './simple-select'
 
 export const Field = <T,>({
@@ -19,12 +19,6 @@ export const Field = <T,>({
   field: ComputedFormField<T>
   formik: FormikProps<Partial<T>>
 }) => {
-  const parent = useRef(null)
-
-  useEffect(() => {
-    parent.current && autoAnimate(parent.current)
-  }, [parent])
-
   const { key } = field
 
   const errors = formik.errors[key]
@@ -63,6 +57,12 @@ export const Field = <T,>({
       },
     })
   }
+
+  const transition = useTransition(errorMessage, {
+    from: { opacity: 0, height: 0 },
+    enter: { opacity: 1, height: 14 },
+    leave: { opacity: 0, height: 0 },
+  })
 
   return (
     <div>
@@ -113,9 +113,13 @@ export const Field = <T,>({
         <div className='mt-1 text-sm opacity-60'>{field.helpText}</div>
       )}
 
-      <div className='overflow-hidden text-sm text-red-500' ref={parent}>
-        {errorMessage && <div className='mt-1'>{errorMessage}</div>}
-      </div>
+      {transition((style) => (
+        <animated.div style={style}>
+          {errorMessage && (
+            <div className='mt-1 text-sm text-red-500'>{errorMessage}</div>
+          )}
+        </animated.div>
+      ))}
     </div>
   )
 }
