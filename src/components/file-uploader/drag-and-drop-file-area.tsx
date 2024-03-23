@@ -22,13 +22,7 @@ export type DragAndDropFileAreaRef = {
 // eslint-disable-next-line react/display-name
 const DragAndDropFileArea = forwardRef<DragAndDropFileAreaRef, Props>(
   (p, ref) => {
-    const {
-      children,
-      setIsDraggedOver,
-      onDropFiles,
-      supportedMimeTypes,
-      ...flexProps
-    } = p
+    const { children, setIsDraggedOver, onDropFiles, supportedMimeTypes } = p
 
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -50,10 +44,11 @@ const DragAndDropFileArea = forwardRef<DragAndDropFileAreaRef, Props>(
         onDragLeave={() => setIsDraggedOver(false)}
       >
         {({ getRootProps, getInputProps }) => (
-          <div {...getRootProps()} {...flexProps}>
+          <div {...getRootProps()} className='flex flex-col p-1'>
             <input
               {...getInputProps()}
               ref={inputRef}
+              style={{ display: 'none', marginBottom: 6, paddingBottom: 0 }}
               accept={supportedMimeTypes?.join(', ')}
             />
             {children}

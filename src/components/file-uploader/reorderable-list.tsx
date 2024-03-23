@@ -40,7 +40,7 @@ const ReorderableList = <T extends { id: string }>(p: {
 
   return (
     <div
-      className='-my-1 flex w-full flex-col overflow-hidden'
+      className='flex w-full flex-col overflow-hidden'
       onClick={(e) => e.stopPropagation()}
     >
       <DragDropContext onDragEnd={onReorderEnd}>

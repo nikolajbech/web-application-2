@@ -12,7 +12,7 @@ import { EmptyFileUploaderItem } from './empty-file-uploader-item'
 import { Button } from '../ui/button'
 import { cn } from '@/lib/utils'
 
-type FileItem = {
+export type FileItem = {
   id: string
   file: File
   errors: string[]
@@ -184,12 +184,13 @@ export const FileUploader = (p: Props) => {
           footerElement={isDraggedOver ? <EmptyFileUploaderItem /> : null}
         />
         {p.multiple && p.fileItems.length > 0 && (
-          <div className='mt-5 justify-center'>
+          <div className='mt-3 flex justify-center'>
             <Button
               onClick={(e) => {
                 e.stopPropagation()
                 onClearAllFilesClick()
               }}
+              variant='ghost'
             >
               Clear All Files
             </Button>
