@@ -42,7 +42,7 @@ export const Field = <T,>({
     onBlur: handleBlur,
   }
 
-  const fieldSpecificAttributes = useCallback((field: FormField) => {
+  const fieldSpecificAttributes = useCallback((field: FormField<T>) => {
     return omit(field, [
       'key',
       'label',
@@ -66,7 +66,10 @@ export const Field = <T,>({
 
   return (
     <div>
-      <Label>{field.label}</Label>
+      <Label>
+        {field.label}
+        {!field.optional && ' *'}
+      </Label>
 
       {field.description && (
         <div className='mb-3 text-sm opacity-70'>{field.description}</div>
@@ -103,6 +106,8 @@ export const Field = <T,>({
           onChange={handleValueChange}
         />
       )}
+
+      {field.type === 'custom' && <div>{field.render({ formik })}</div>}
 
       {field.helpText && (
         <div className='mt-1 text-sm opacity-60'>{field.helpText}</div>

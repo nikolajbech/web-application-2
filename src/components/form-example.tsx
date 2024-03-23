@@ -15,7 +15,7 @@ export const FormExample = () => {
       }>
         formFields={{
           name: { type: 'input', helpText: 'This is some help text' },
-          description: { type: 'textarea' },
+          description: { type: 'textarea', optional: true },
           email: {
             helpText: 'Write you email with an @',
             type: 'input',
@@ -48,7 +48,6 @@ export const FormExample = () => {
         }}
         initialValues={{
           name: 'Lars',
-          selectOption: '1',
           selectMultipleOptions: ['2'],
         }}
         onSubmit={(validated) => alert(JSON.stringify(validated))}

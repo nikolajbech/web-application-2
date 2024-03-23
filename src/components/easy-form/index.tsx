@@ -7,21 +7,21 @@ import { type FieldProps } from './FieldProps'
 import { Field } from './field'
 import { getFormValues } from './utils'
 
-export type FormField = {
+export type FormField<T> = {
   label?: string // Will default to the key
   optional?: boolean
   hidden?: boolean
   description?: string
   helpText?: string
-} & FieldProps
+} & FieldProps<T>
 
-export type ComputedFormField<T> = FormField & {
+export type ComputedFormField<T> = FormField<T> & {
   key: keyof T
   label: string
 }
 
 type Props<T> = {
-  formFields: Record<keyof T, FormField>
+  formFields: Record<keyof T, FormField<T>>
   initialValues?: Partial<T>
   onSubmit: (validatedValues: Partial<T>) => void
   loading: boolean
