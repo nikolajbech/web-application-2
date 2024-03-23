@@ -3,6 +3,7 @@ import { type InputProps } from '../ui/input'
 import { type TextareaProps } from '../ui/textarea'
 import type * as Yup from 'yup'
 import { type ReactNode } from 'react'
+import { ComputedFormField } from '.'
 
 export type FieldProps<T> =
   | InputField
@@ -46,6 +47,14 @@ type SimpleSelectField = {
 
 type CustomField<T> = {
   type: 'custom'
-  render: ({ formik }: { formik: FormikProps<Partial<T>> }) => ReactNode
+  render: ({
+    formik,
+    field,
+  }: {
+    formik: FormikProps<Partial<T>>
+    field: Omit<ComputedFormField<T>, 'render'>
+    value: T[keyof T]
+    onChange: (value: T[keyof T]) => void
+  }) => ReactNode
   validate?: YupValidation
 }

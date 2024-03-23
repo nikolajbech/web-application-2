@@ -49,7 +49,7 @@ export const Field = <T,>({
     ]) as Record<string, unknown>
   }, [])
 
-  const handleValueChange = (value: string | string[]) => {
+  const handleValueChange = (value: T[keyof T]) => {
     handleChange({
       target: {
         name: key,
@@ -87,14 +87,14 @@ export const Field = <T,>({
         <RadioButtons
           options={field.options}
           value={value as string}
-          onChange={handleValueChange}
+          onChange={(val) => handleValueChange(val as T[keyof T])}
         />
       )}
 
       {field.type === 'checkboxes' && (
         <Checkboxes
           options={field.options}
-          onChange={handleValueChange}
+          onChange={(val) => handleValueChange(val as T[keyof T])}
           values={value as string[]}
         />
       )}
@@ -103,11 +103,20 @@ export const Field = <T,>({
         <SimpleSelect
           options={field.options}
           value={value as string}
-          onChange={handleValueChange}
+          onChange={(val) => handleValueChange(val as T[keyof T])}
         />
       )}
 
-      {field.type === 'custom' && <div>{field.render({ formik })}</div>}
+      {field.type === 'custom' && (
+        <div>
+          {field.render({
+            formik,
+            field: omit(field, ['render']),
+            value: value as T[keyof T],
+            onChange: handleValueChange,
+          })}
+        </div>
+      )}
 
       {field.helpText && (
         <div className='mt-1 text-sm opacity-60'>{field.helpText}</div>

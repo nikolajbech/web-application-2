@@ -12,6 +12,7 @@ export const FormExample = () => {
         selectOption: string
         selectMultipleOptions: string[]
         simpleSelect: string
+        customerField: string
       }>
         formFields={{
           name: { type: 'input', helpText: 'This is some help text' },
@@ -44,6 +45,17 @@ export const FormExample = () => {
               { label: 'Option 1 - more info here - longer text', value: '1' },
               { label: 'Option 2', value: '2' },
             ],
+          },
+          customerField: {
+            type: 'custom',
+            render: ({ value, onChange }) => (
+              <div>
+                <input
+                  value={value}
+                  onChange={(e) => onChange(e.target.value)}
+                />
+              </div>
+            ),
           },
         }}
         initialValues={{
