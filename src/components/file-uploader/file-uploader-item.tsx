@@ -4,6 +4,7 @@
 import { filesize } from 'filesize'
 import { capitalize } from 'lodash'
 import { DownloadCloud, Replace, Trash } from 'lucide-react'
+import { useCallback, useMemo } from 'react'
 import ReactPlayer from 'react-player'
 
 export type FileUploadState = 'uploaded' | 'not uploaded' | 'error'
@@ -56,18 +57,24 @@ export const FileUploaderItem = (p: Props) => {
   const isImage = p.fileItem.mimeType?.startsWith('image')
   const isVideo = p.fileItem.mimeType?.startsWith('video')
 
-  const ImagePreview = () => (
-    <img src={p.fileItem.url} className='h-full w-full object-cover' alt='' />
+  const ImagePreview = useCallback(
+    () => (
+      <img src={p.fileItem.url} className='h-full w-full object-cover' alt='' />
+    ),
+    [p.fileItem.url],
   )
 
-  const VideoPreview = () => (
-    <ReactPlayer
-      url={p.fileItem.url}
-      playing={false}
-      volume={0}
-      width='100%'
-      height='100%'
-    />
+  const VideoPreview = useCallback(
+    () => (
+      <ReactPlayer
+        url={p.fileItem.url}
+        playing={false}
+        volume={0}
+        width='100%'
+        height='100%'
+      />
+    ),
+    [p.fileItem.url],
   )
 
   const Errors = () => {
@@ -82,9 +89,9 @@ export const FileUploaderItem = (p: Props) => {
   return (
     <div>
       <div className='flex w-full min-w-full overflow-hidden rounded-md bg-background'>
-        <div className='relative h-20 min-w-32 max-w-32 overflow-hidden rounded-md'>
+        <div className='relative h-20 min-w-32 max-w-32 overflow-hidden rounded-md border'>
           {isImage ? <ImagePreview /> : isVideo ? <VideoPreview /> : null}
-          <div className='absolute bottom-1 left-1 rounded-full bg-white/50 px-2 text-xs backdrop-blur-md'>
+          <div className='absolute bottom-1 left-1 rounded-full bg-white/50 px-1.5 text-xs backdrop-blur-md'>
             {tag.text}
           </div>
         </div>
@@ -98,7 +105,7 @@ export const FileUploaderItem = (p: Props) => {
             </p>
           )}
           <Errors />
-          <div className='absolute bottom-2 left-2 flex'>
+          <div className='absolute bottom-1 left-2 flex'>
             <button
               className='mr-2 text-sm'
               onClick={p.replaceItem}
