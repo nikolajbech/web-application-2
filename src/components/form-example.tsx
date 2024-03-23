@@ -17,10 +17,9 @@ export const FormExample = () => {
           name: { type: 'input', helpText: 'This is some help text' },
           description: { type: 'textarea', optional: true },
           email: {
-            helpText: 'Write you email with an @',
             type: 'input',
             label: 'Email address',
-            validate: (yup) => yup.string().email(),
+            validate: (yup) => yup.string().required().email(),
           },
           selectOption: {
             type: 'radio-buttons',

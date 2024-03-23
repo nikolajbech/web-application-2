@@ -60,7 +60,7 @@ export const Field = <T,>({
 
   const transition = useTransition(errorMessage, {
     from: { opacity: 0, height: 0 },
-    enter: { opacity: 1, height: 14 },
+    enter: { opacity: 1, height: 16 },
     leave: { opacity: 0, height: 0 },
   })
 
@@ -113,13 +113,13 @@ export const Field = <T,>({
         <div className='mt-1 text-sm opacity-60'>{field.helpText}</div>
       )}
 
-      {transition((style) => (
-        <animated.div style={style}>
-          {errorMessage && (
-            <div className='mt-1 text-sm text-red-500'>{errorMessage}</div>
-          )}
-        </animated.div>
-      ))}
+      <div className='mt-1'>
+        {transition((style) => (
+          <animated.div style={{ ...style }}>
+            <div className='text-sm text-red-500'>{errorMessage}</div>
+          </animated.div>
+        ))}
+      </div>
     </div>
   )
 }

@@ -42,7 +42,7 @@ export const EasyForm = <T,>(p: Props<T>) => {
       >
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
-            <div className='flex flex-col gap-5'>
+            <div className='flex flex-col gap-4'>
               {fields.map((field, i) => (
                 <Field<T> key={i} field={field} formik={formik} />
               ))}
