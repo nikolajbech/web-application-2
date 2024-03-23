@@ -10,6 +10,7 @@ import { type ComputedFormField, type FormField } from './index'
 import { RadioButtons } from './radio-buttons'
 import { Label } from '../ui/label'
 import { Checkboxes } from './checkboxes'
+import { SimpleSelect } from './simple-select'
 
 export const Field = <T,>({
   field,
@@ -92,6 +93,14 @@ export const Field = <T,>({
           options={field.options}
           onChange={handleValueChange}
           values={value as string[]}
+        />
+      )}
+
+      {field.type === 'simple-select' && (
+        <SimpleSelect
+          options={field.options}
+          value={value as string}
+          onChange={handleValueChange}
         />
       )}
 

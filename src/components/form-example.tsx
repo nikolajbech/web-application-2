@@ -11,6 +11,7 @@ export const FormExample = () => {
         email: string
         selectOption: string
         selectMultipleOptions: string[]
+        simpleSelect: string
       }>
         formFields={{
           name: { type: 'input', helpText: 'This is some help text' },
@@ -34,6 +35,13 @@ export const FormExample = () => {
             helpText: 'This is some help text',
             options: [
               { label: 'Option 1', value: '1' },
+              { label: 'Option 2', value: '2' },
+            ],
+          },
+          simpleSelect: {
+            type: 'simple-select',
+            options: [
+              { label: 'Option 1 - more info here - longer text', value: '1' },
               { label: 'Option 2', value: '2' },
             ],
           },

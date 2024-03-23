@@ -7,6 +7,7 @@ export type FieldProps =
   | TextAreaField
   | RadioButtonsField
   | CheckBoxesField
+  | SimpleSelectField
 
 export type Options = {
   label: string
@@ -30,5 +31,10 @@ type RadioButtonsField = {
 
 type CheckBoxesField = {
   type: 'checkboxes'
+  options: Options[]
+}
+
+type SimpleSelectField = {
+  type: 'simple-select'
   options: Options[]
 }
