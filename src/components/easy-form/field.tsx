@@ -1,15 +1,16 @@
 'use client'
 
-import autoAnimate from '@formkit/auto-animate'
+import { animated, useTransition } from '@react-spring/web'
 import { type FormikProps } from 'formik'
 import { omit } from 'lodash'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback } from 'react'
 import { Input } from '../ui/input'
+import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
+import { Checkboxes } from './checkboxes'
 import { type ComputedFormField, type FormField } from './index'
 import { RadioButtons } from './radio-buttons'
-import { Label } from '../ui/label'
-import { Checkboxes } from './checkboxes'
+import { SimpleSelect } from './simple-select'
 
 export const Field = <T,>({
   field,
@@ -18,12 +19,6 @@ export const Field = <T,>({
   field: ComputedFormField<T>
   formik: FormikProps<Partial<T>>
 }) => {
-  const parent = useRef(null)
-
-  useEffect(() => {
-    parent.current && autoAnimate(parent.current)
-  }, [parent])
-
   const { key } = field
 
   const errors = formik.errors[key]
@@ -41,7 +36,7 @@ export const Field = <T,>({
     onBlur: handleBlur,
   }
 
-  const fieldSpecificAttributes = useCallback((field: FormField) => {
+  const fieldSpecificAttributes = useCallback((field: FormField<T>) => {
     return omit(field, [
       'key',
       'label',
@@ -63,9 +58,18 @@ export const Field = <T,>({
     })
   }
 
+  const transition = useTransition(errorMessage, {
+    from: { opacity: 0, height: 0 },
+    enter: { opacity: 1, height: 16 },
+    leave: { opacity: 0, height: 0 },
+  })
+
   return (
     <div>
-      <Label>{field.label}</Label>
+      <Label>
+        {field.label}
+        {!field.optional && ' *'}
+      </Label>
 
       {field.description && (
         <div className='mb-3 text-sm opacity-70'>{field.description}</div>
@@ -95,12 +99,26 @@ export const Field = <T,>({
         />
       )}
 
+      {field.type === 'simple-select' && (
+        <SimpleSelect
+          options={field.options}
+          value={value as string}
+          onChange={handleValueChange}
+        />
+      )}
+
+      {field.type === 'custom' && <div>{field.render({ formik })}</div>}
+
       {field.helpText && (
         <div className='mt-1 text-sm opacity-60'>{field.helpText}</div>
       )}
 
-      <div className='overflow-hidden text-sm text-red-500' ref={parent}>
-        {errorMessage && <div className='mt-1'>{errorMessage}</div>}
+      <div className='mt-1'>
+        {transition((style) => (
+          <animated.div style={{ ...style }}>
+            <div className='text-sm text-red-500'>{errorMessage}</div>
+          </animated.div>
+        ))}
       </div>
     </div>
   )

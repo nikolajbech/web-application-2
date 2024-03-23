@@ -11,14 +11,15 @@ export const FormExample = () => {
         email: string
         selectOption: string
         selectMultipleOptions: string[]
+        simpleSelect: string
       }>
         formFields={{
           name: { type: 'input', helpText: 'This is some help text' },
-          description: { type: 'textarea' },
+          description: { type: 'textarea', optional: true },
           email: {
-            helpText: 'Write you email with an @',
             type: 'input',
-            validate: (yup) => yup.string().email(),
+            label: 'Email address',
+            validate: (yup) => yup.string().required().email(),
           },
           selectOption: {
             type: 'radio-buttons',
@@ -37,10 +38,16 @@ export const FormExample = () => {
               { label: 'Option 2', value: '2' },
             ],
           },
+          simpleSelect: {
+            type: 'simple-select',
+            options: [
+              { label: 'Option 1 - more info here - longer text', value: '1' },
+              { label: 'Option 2', value: '2' },
+            ],
+          },
         }}
         initialValues={{
           name: 'Lars',
-          selectOption: '1',
           selectMultipleOptions: ['2'],
         }}
         onSubmit={(validated) => alert(JSON.stringify(validated))}
