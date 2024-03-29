@@ -24,6 +24,8 @@ type Props<T> = {
   formFields: Record<keyof T, FormField<T>>
   initialValues?: Partial<T>
   onSubmit: (validatedValues: Partial<T>) => void
+  submitButtonText?: string
+  onCancel?: () => void
   loading: boolean
 }
 
@@ -34,7 +36,7 @@ export const EasyForm = <T,>(p: Props<T>) => {
   )
 
   return (
-    <div className=''>
+    <div>
       <Formik
         initialValues={initialValues}
         validationSchema={Yup.object().shape(yupSchema)}
@@ -47,13 +49,20 @@ export const EasyForm = <T,>(p: Props<T>) => {
                 <Field<T> key={i} field={field} formik={formik} />
               ))}
             </div>
-            <Button
-              type='submit'
-              className='mt-8'
-              disabled={formik.isSubmitting}
-            >
-              Submit
-            </Button>
+            <div className='flex justify-end gap-2'>
+              {p.onCancel && (
+                <Button className='mt-8' variant='outline' onClick={p.onCancel}>
+                  Cancel
+                </Button>
+              )}
+              <Button
+                type='submit'
+                className='mt-8'
+                disabled={formik.isSubmitting}
+              >
+                {p.submitButtonText ?? 'Submit'}
+              </Button>
+            </div>
           </form>
         )}
       </Formik>
