@@ -18,6 +18,7 @@
     "db:nuke": "docker-compose down --volumes --remove-orphans",
     "gen:component": "node scripts/component.js",
     "gen:contextHook": "node scripts/contextHook.js",
+    "gen:crud": "node scripts/crud.js",
     "ui:add": "npx shadcn-ui@latest add",
     "ui": "open https://ui.shadcn.com/docs/components/accordion",
     "github": "open https://github.com/nikolajbech/web-application-2",

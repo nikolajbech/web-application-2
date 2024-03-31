@@ -66,10 +66,12 @@ export const Field = <T,>({
 
   return (
     <div>
-      <Label>
-        {field.label}
-        {!field.optional && ' *'}
-      </Label>
+      <div className='mb-1'>
+        <Label>
+          {field.label}
+          {!field.optional && ' *'}
+        </Label>
+      </div>
 
       {field.description && (
         <div className='mb-3 text-sm opacity-70'>{field.description}</div>
