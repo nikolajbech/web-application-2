@@ -49,21 +49,12 @@ import { publicProcedure } from '../../trpc'
 import { db } from '@/server/db'
 
 export const ${lowerCased}s = publicProcedure
-  .input(
-    z.object({
-      id: z.string(),
-    }),
-  )
-  .query(async ({ input }) => {
-    const { id } = input
-
-    return getProjects(id)
+  .query(async () => {
+    return getProjects()
   })
 
-export const getProjects = (id: string) => {
-  return db.query.${lowerCased}s.findFirst({
-    where: (q, { eq }) => eq(q.id, id),
-  })
+export const getProjects = () => {
+  return db.query.${lowerCased}s.findMany()
 }
 `
 
