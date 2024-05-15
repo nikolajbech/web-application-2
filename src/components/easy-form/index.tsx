@@ -51,7 +51,14 @@ export const EasyForm = <T,>(p: Props<T>) => {
             </div>
             <div className='flex justify-end gap-2'>
               {p.onCancel && (
-                <Button className='mt-8' variant='outline' onClick={p.onCancel}>
+                <Button
+                  className='mt-8'
+                  variant='outline'
+                  onClick={(e) => {
+                    e.preventDefault()
+                    p.onCancel?.()
+                  }}
+                >
                   Cancel
                 </Button>
               )}
