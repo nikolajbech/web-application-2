@@ -35,7 +35,14 @@ const defaultValue: State = {
 }
 
 export const ${contextHookName}Context = createContext<State>(defaultValue)
-export const use${contextHookName} = (): State => useContext(${contextHookName}Context)
+export const use${contextHookName} = (): State => {
+  const context = useContext(${contextHookName}Context)
+  if (!context) {
+    throw new Error('use${contextHookName} must be used within a ${contextHookName}Provider')
+  }
+  
+  return context
+}
 
 type ${contextHookName}ProviderProps = {
   children: JSX.Element | JSX.Element[]
