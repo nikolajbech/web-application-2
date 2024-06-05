@@ -49,7 +49,7 @@ type ${contextHookName}ProviderProps = {
 }
 
 export const ${contextHookName}Provider: FC<${contextHookName}ProviderProps> = (p) => {
-  const [value, setValue] = useState<string>('')
+  const [value, setValue] = useState<State['value']>(defaultValue.value)
 
   return (
     <${contextHookName}Context.Provider
