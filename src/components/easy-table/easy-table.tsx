@@ -21,8 +21,8 @@ export const EasyTable = <T, K extends keyof T>(p: {
     <TablePrimitive>
       <TableHeader>
         <TableRow>
-          {p.columns?.map((column, key) => (
-            <TableHead key={key}>{column.label}</TableHead>
+          {p.columns?.map((column, i) => (
+            <TableHead key={i}>{column.label}</TableHead>
           ))}
         </TableRow>
       </TableHeader>

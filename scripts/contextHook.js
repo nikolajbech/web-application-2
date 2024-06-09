@@ -22,7 +22,9 @@ if (contextHookName[0].toUpperCase() !== contextHookName[0]) {
 const dir = './src/hooks'
 
 const contextHookPath = `${dir}/use${contextHookName}.tsx`
-const contextHookSnippet = `import { createContext, useContext, useState } from 'react'
+const contextHookSnippet = `'use client'
+
+import { createContext, useContext, useState } from 'react'
 
 type State = {
   value: string
