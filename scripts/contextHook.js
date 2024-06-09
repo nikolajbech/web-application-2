@@ -22,7 +22,7 @@ if (contextHookName[0].toUpperCase() !== contextHookName[0]) {
 const dir = './src/hooks'
 
 const contextHookPath = `${dir}/use${contextHookName}.tsx`
-const contextHookSnippet = `import { createContext, FC, useContext, useState } from 'react'
+const contextHookSnippet = `import { createContext, useContext, useState } from 'react'
 
 type State = {
   value: string
@@ -32,6 +32,23 @@ type State = {
 const defaultValue: State = {
   value: '',
   setValue: () => null,
+}
+
+export const ${contextHookName}Provider = (p: {
+  children: JSX.Element | JSX.Element[]
+}) => {
+  const [value, setValue] = useContextState('value')
+
+  return (
+    <${contextHookName}Context.Provider
+      value={{
+        value,
+        setValue,
+      }}
+    >
+      {p.children}
+    </${contextHookName}Context.Provider>
+  )
 }
 
 export const ${contextHookName}Context = createContext<State>(defaultValue)
@@ -44,23 +61,8 @@ export const use${contextHookName} = (): State => {
   return context
 }
 
-type ${contextHookName}ProviderProps = {
-  children: JSX.Element | JSX.Element[]
-}
-
-export const ${contextHookName}Provider: FC<${contextHookName}ProviderProps> = (p) => {
-  const [value, setValue] = useState<State['value']>(defaultValue.value)
-
-  return (
-    <${contextHookName}Context.Provider
-      value={{
-        value,
-        setValue,
-      }}
-    >
-      {p.children}
-    </${contextHookName}Context.Provider>
-  )
+const useContextState = <K extends keyof State>(key: K) => {
+  return useState<State[typeof key]>(defaultValue[key])
 }
 `
 
