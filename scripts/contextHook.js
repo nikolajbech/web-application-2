@@ -37,7 +37,7 @@ const defaultValue: State = {
 }
 
 export const ${contextHookName}Provider = (p: {
-  children: JSX.Element | JSX.Element[]
+  children: React.ReactNode
 }) => {
   const [value, setValue] = useContextState('value')
 
